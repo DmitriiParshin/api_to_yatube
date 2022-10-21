@@ -14,14 +14,17 @@ class Post(models.Model):
     image = models.ImageField(
         upload_to='posts/', null=True, blank=True)
 
+    class Meta:
+        ordering = ('pk',)
+
     def __str__(self):
-        return self.text
+        return self.text[:30]
 
 
 class Group(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField()
 
     def __str__(self):
         return self.title
@@ -45,6 +48,18 @@ class Follow(models.Model):
                              related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE,
                                   related_name='following')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'following'],
+                name='already_following'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('following')),
+                name="check_follow",
+            ),
+        ]
 
     def __str__(self):
         return f'{self.user} подписан на {self.following}'

@@ -1,5 +1,10 @@
-# api_final
-
+# API Yatube
+### Описание
+YATUBE - cоциальная сеть блогеров
+### Технологии
+- Python 3.7.15
+- Django 2.2.19
+- Django Rest Framework 3.12.4
 ### Как запустить проект:
 
 Клонировать репозиторий и перейти в него в командной строке:
@@ -42,4 +47,10 @@ python3 manage.py migrate
 
 ```
 python3 manage.py runserver
+```
+
+Документация для API Yatube с примерами доступна:
+
+```
+http://127.0.0.1:8000/redoc/
 ```
