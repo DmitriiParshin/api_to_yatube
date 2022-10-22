@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import (IsAuthenticated,
@@ -17,7 +17,6 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
     pagination_class = LimitOffsetPagination
-    filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('group',)
 
     def perform_create(self, serializer):
@@ -43,8 +42,7 @@ class CommentViewSet(ModelViewSet):
         return serializer.save(author=self.request.user, post=self.get_post())
 
 
-class FollowViewSet(ModelViewSet):
-    http_method_names = ['get', 'post']
+class FollowViewSet(ListCreateAPIView):
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
     filter_backends = (SearchFilter,)
